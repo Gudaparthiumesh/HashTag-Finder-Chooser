@@ -1,0 +1,55 @@
+<aura:component controller="hashTagFinderChooserCtrl" implements="force:appHostable,flexipage:availableForAllPageTypes,flexipage:availableForRecordHome,force:hasRecordId,forceCommunity:availableForAllPageTypes,force:lightningQuickAction" access="global" >
+    <aura:attribute name="UserInputText" type="string" default=""/>
+    <aura:attribute name="UserSelections" type="string" default=""/>
+    <aura:attribute name="searchTag" type="String" />
+    <aura:attribute name="openHashTagModel" type="boolean" default="false"/>
+    <aura:attribute name="hashTagsdata" type="object"/>
+    <aura:attribute name="hashTagsdataDup" type="object"/>
+    <aura:attribute name="dataColumns" type="List"/>
+    <aura:handler name="init" value="{!this}" action="{!c.doInit}"/>
+    <div style="padding: 0.2%; background: rgb(64, 64, 64);border-radius:10px 10px 0px 0px;">
+        <div class="slds-p-around_small slds-text-heading_small slds-text-color_inverse" style="text-align:center">
+            #Tag Picker
+        </div>
+    </div>
+    <div class="slds-box" style="background:white;height: 90% !important">
+        <div class="slds-grid slds-gutters">
+            <div class="slds-col slds-form-element slds-size_3-of-12"></div>
+            <div class="slds-col slds-form-element slds-size_6-of-12">
+                <span class="textareaCustom" onkeypress="{!c.getUserKeyStroke}"> 
+                    <lightning:textarea aura:id="UserInput" name="inputText" value="{!v.UserInputText}" placeholder="Type here..."/>
+                </span>
+                <br/>
+            </div>
+            <div class="slds-col slds-form-element slds-size_3-of-12"></div>
+        </div>
+    </div>
+    <aura:if isTrue="{!v.openHashTagModel}">
+        <section role="dialog" tabindex="-1" aria-labelledby="modal-heading-01" aria-modal="true" aria-describedby="modal-content-id-1" class="slds-modal slds-fade-in-open">
+            <div class="slds-modal__container">
+                <header class="slds-modal__header">
+                    <h2 id="modal-heading-01" class="slds-text-heading_medium">Pick &amp; place your #Tag</h2>
+                </header>
+                <span class="padding-right">
+                    <lightning:input variant="label-hidden" placeholder="Search Tag" type="search" value="{!v.searchTag}" onchange="{!c.onChangeSearchTag}" />
+                </span>
+                <footer class="slds-modal__footer">
+                    <div style="height: 300px">
+                        <lightning:datatable
+                                             keyField="id"
+                                             data="{!v.hashTagsdata}"
+                                             columns="{!v.dataColumns}"
+                                             hideCheckboxColumn="false"
+                                             onrowselection="{!c.getSelectedHashTag}" />
+                        
+                    </div>
+                    <br/>
+                    <center>
+                        <lightning:button onclick="{!c.insertSelectedTags}" label="Insert Tags" variant="brand" aura:id="disablebuttonid"/>
+                    </center>
+                </footer>
+            </div>
+        </section>
+        <div class="slds-backdrop slds-backdrop_open"></div>
+    </aura:if>
+</aura:component>
